@@ -36,8 +36,8 @@ public class Robot extends IterativeRobot { // Prep everything
     Joystick xbox; // Xbox Controller
 	CANTalon ballWheel ; // Talon to control the ball wheel motor
 	Timer timer; // Timer
-	DigitalInput inPort0; // DIO 0 for digital input
-	DigitalOutput outPort1; // DIO 1 for digital output
+	DigitalInput inputOn1;
+	DigitalOutput outputOn0;
 	Ultrasonic front1; // Ultrasonic sensor 1 for front of bot
 	double front1Distance; // Distance from front1 in inches
 
@@ -51,12 +51,12 @@ public class Robot extends IterativeRobot { // Prep everything
         chooser.addObject("My Auto", customAuto);
         SmartDashboard.putData("Auto choices", chooser);
         timer = new Timer();
-        inPort0 = new DigitalInput(0);
-        outPort1 = new DigitalOutput(1);
-        front1 = new Ultrasonic(outPort1,inPort0);
+        inputOn1 = new DigitalInput(1);
+        outputOn0 = new DigitalOutput(0);
+        front1 = new Ultrasonic(outputOn0,inputOn1);
         left = new VictorSP(0);
         right = new VictorSP(1);
-        move = new RobotDrive(left,right);
+        //move = new RobotDrive(left,right);
         ballWheel = new CANTalon(1);
         xbox = new Joystick(0);
         maxSpeed = 0.4;
@@ -75,6 +75,8 @@ public class Robot extends IterativeRobot { // Prep everything
     	autoSelected = (String) chooser.getSelected();
 		autoSelected = SmartDashboard.getString("Auto Selector", defaultAuto);
 		System.out.println("Auto selected: " + autoSelected);
+		front1.setEnabled(true);
+		front1.setAutomaticMode(false);
 		// curTime = System.currentTimeMillis(); // Time at start of autonomous
     }
 
@@ -89,6 +91,9 @@ public class Robot extends IterativeRobot { // Prep everything
     	case defaultAuto:
     	default:
     		// autoMove(left,right);
+    		front1Distance = front1.getRangeInches();
+    		System.out.println(front1Distance);
+    		timer.delay(1);
             break;
     	}
     }
@@ -104,8 +109,8 @@ public class Robot extends IterativeRobot { // Prep everything
     	boolean  yButton = xbox.getRawButton(4);  // Y button status
     	ballWheel.enable(); // Enable the CAN Talon */
     	boolean aButton = xbox.getRawButton(1); // A button status
-    	front1Distance = front1.getRangeInches(); // Distance from ultrasonic sensor
-    	System.out.println(front1Distance);
+    	//front1Distance = front1.getRangeInches(); // Distance from ultrasonic sensor
+    	//System.out.println(front1Distance);
     	
     	if(aButton){ // Checks max speed of robot, changes it
     		if(maxSpeed == 0.4){
@@ -119,11 +124,11 @@ public class Robot extends IterativeRobot { // Prep everything
     	}
     	
     	if(Fmove > 0){ // Moving Forwards
-    		move.drive(Fmove * -maxSpeed , Turn);
+    		//move.drive(Fmove * -maxSpeed , Turn);
     	}
     	
     	else if(Rmove > 0){ // Moving Backwards
-    		move.drive(Rmove * maxSpeed, Turn);
+    		//move.drive(Rmove * maxSpeed, Turn);
     	}	
     	//Old Shooter Code
     	/*if(bButton){ // B button down, moves towards robot, intake
